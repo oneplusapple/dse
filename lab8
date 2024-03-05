@@ -1,0 +1,145 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct BSTNode{
+	int key;
+	struct BSTNode* lchild;
+	struct BSTNode* rchild;
+};
+
+struct BSTNode* createnode(int value){
+	struct BSTNode* temp=(struct BSTNode*)malloc(sizeof(struct BSTNode));
+	temp->key=value;
+	temp->lchild=NULL;
+	temp->rchild=NULL;
+	return temp;
+}
+
+struct BSTNode* ins_node(struct BSTNode* root,int value){
+	if(root==NULL)
+		return createnode(value);
+	else if(value < root->key){
+		root->lchild = ins_node(root->lchild,value);
+	}
+	else
+		root->rchild = ins_node(root->rchild,value);
+	return root;	  
+}
+
+void pre_order(struct BSTNode* root){
+	if(root==NULL){
+	   return;
+    }
+    else{
+    	printf("%d ",root->key);
+    	pre_order(root->lchild);
+    	pre_order(root->rchild);	
+	}
+	return root;
+}
+
+void in_order(struct BSTNode* root){
+	if(root==NULL){
+	   return;
+  }
+    else{
+    	in_order(root->lchild);
+    	printf("%d ",root->key);
+    	in_order(root->rchild);	
+	}
+	return root;
+}
+
+void post_order(struct BSTNode* root){
+	if(root==NULL){
+	   return;
+  }
+    else{
+    	post_order(root->lchild);
+    	post_order(root->rchild);
+    	printf("%d ",root->key);	
+	}
+	return root;
+}
+
+struct BSTNode* search_Node(struct BSTNode* root,int searchkey){
+	if(root==NULL || root->key==searchkey){
+		return root;
+	}
+	else if(searchkey<root->key)
+		return search_Node(root->lchild,searchkey);
+	else
+		return search_Node(root->rchild,searchkey);
+	return root;
+}
+
+int main(){
+	struct BSTNode* root=NULL;
+	int searchkey,ch,value,n;
+	while(1){
+		printf("\nMenu:\n");
+		printf("1.Insertion\n");
+		printf("2.Preorder Traversal\n");
+		printf("3.Inorder Traversal\n");
+		printf("4.Postorder Traversal\n");
+		printf("5.Search an Element\n");
+		printf("6.Exit\n");
+		printf("Enter your choice:"); 
+		scanf("%d",&ch);
+		switch(ch){ 
+			case 1:
+				printf("\nEnter the number of nodes to be inserted:");
+				scanf("%d",&n);
+				for(int i=0;i<n;i++){
+					printf("\nEnter the element to be inserted:");
+					scanf("%d",&value);
+					root = ins_node(root,value);   					  	    	
+				}   
+				break;
+			case 2:
+				 if(root==NULL){
+					printf("\nNo elements in a Binary search Tree.\n");
+					break;			 	
+				 }
+				printf("\nPreorder traversal is:");
+				pre_order(root);
+				break;	 
+			case 3:
+				 if(root==NULL){
+					printf("\nNo elements in a Binary search Tree.\n");
+					break;			 	
+				 }
+				printf("\nInorder traversal is:");
+				in_order(root);
+				break;	     
+			case 4:
+				 if(root==NULL){
+					printf("\nNo elements in a Binary search Tree.\n");
+					break;			 	
+				 }
+				printf("\nPostorder traversal is:");
+				post_order(root);
+				break;
+			case 5:
+				 if(root==NULL){
+					printf("\nNo elements in a Binary search Tree.\n");
+					break;			 	
+				 }
+				printf("Enter the element to search: ");
+				scanf("%d",&searchkey);
+				if(search_Node(root,searchkey)!=NULL){
+					printf("\n%d is found.\n",searchkey);
+				} 
+				else{
+					printf("\n%d is not found.\n",searchkey);
+				}
+				break;
+			case 6:
+				printf("\nExiting program..\n");
+				exit(0);
+			default:
+				printf("\nInvalid Choice,Enter valid choice and try again.\n");
+		}
+	}
+	return 0;
+}
