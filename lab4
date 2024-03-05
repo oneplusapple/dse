@@ -1,0 +1,76 @@
+#include<stdio.h>
+#include<string.h>
+#define MAX 100
+int stack[MAX];
+int top=-1;
+
+void push(char postfix)
+{
+	if(top==MAX-1)
+	{
+		printf("Stack overflow \n");
+		return;
+	}
+	stack[++top]=postfix;
+}
+int pop(){
+	if(top==-1)
+	{
+		printf("stack underflow \n");
+	    return 0;
+	}
+	return(stack[top--]);
+}
+int eval_postfix(char postfix[])
+{
+	int i=0;
+	int op1,op2,result;
+	while(postfix[i] !='\0')
+	{
+		if(isdigit(postfix[i]))
+		{
+			push(postfix[i]-'0');
+		}
+		else{
+			op2=pop();
+			op1=pop();
+			switch(postfix[i])
+			{
+				case'+':
+					result=op1+op2;
+					break;
+				case'-':
+					result=op1-op2;
+					break;
+				case'*':
+					result=op1*op2;
+					break;
+				case'/':
+					if(op2!=0)
+					{
+						result=op1/op2;
+					}
+					else
+					{
+						printf("Divison by zero\n");
+						exit(0);
+					}
+					break;
+					default:
+						printf("Invalid postfix expression \n");
+						exit(0);
+			}
+			push(result);
+		}
+		i++;
+	}
+	return pop();
+}
+int main(){
+	char postfix[100];
+	printf("Enter a postfix expression");
+	scanf("%s",postfix);
+	int result=eval_postfix(postfix);
+	printf("Result of the postfix expression %d\n",result);
+	return 0;
+}
