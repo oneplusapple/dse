@@ -1,0 +1,52 @@
+#include<stdio.h>
+int i,n;
+struct emp
+{
+	char emp_name[20];
+	int emp_number,basic;
+	float gross,net_salary,all_allowances,it;
+}e[50];
+void Reddata(){
+	printf("Enter the many emp?");
+	scanf("%d",&n);
+	printf("Enter the employee details \n");
+	for(i=0;i<n;i++)
+	{
+		printf("Enter the employee name \n ");
+		scanf("%s",&e[i].emp_name);
+		printf("Enter the employee number \n");
+		scanf("%d",&e[i].emp_number);
+		printf("Enter the employee basic salary \n ");
+		scanf("%d",&e[i].basic);
+		printf("\n");
+	}
+}
+void calculate(){
+	for(i=0;i<n;i++)
+	{
+		e[i].all_allowances=1.23*e[i].basic;
+		e[i].gross=e[i].basic+e[i].all_allowances;
+		e[i].it=0.3*e[i].gross;
+		e[i].net_salary=e[i].gross=e[i].it;
+    }
+}
+void Display(){
+	printf("\n employee detals are \n");
+	for(i=0;i<n;i++)
+	{
+		printf("name of the employee %s\n",e[i].emp_name);
+		printf("number of the employee %d\n",e[i].emp_number);
+		printf("basic_salary of the employee%f\n",e[i].basic);
+		printf("gross of the employee %f\n",e[i].gross);
+		printf("net_salary of the employee %f\n",e[i].net_salary);
+		printf("all_allowances of the employee %f\n",e[i].all_allowances);
+		printf("it of the employee %f\n",e[i].it);
+		printf("\n");
+	}
+}
+int main(){
+	Reddata();
+	calculate();
+	Display();
+	return(0);
+}
