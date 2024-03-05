@@ -1,0 +1,167 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct Student {
+    char USN[20];
+    struct Student* link;
+};
+
+struct Student* createStudentNode(char USN1[]) {
+    struct Student* temp = (struct Student*)malloc(sizeof(struct Student));
+    strcpy(temp->USN, USN1);
+    temp->link = NULL;
+    return temp;
+}
+
+void rear_ins(struct Student** list, char USN[]) {
+    struct Student* temp = createStudentNode(USN);
+    if (*list == NULL) {
+        *list = temp;
+    } else {
+        struct Student* temp1 = *list;
+        while (temp1->link != NULL) {
+            temp1 = temp1->link;
+        }
+        temp1->link = temp;
+    }
+}
+
+void front_ins(struct Student** list, char USN[]) {
+    struct Student* temp = createStudentNode(USN);
+    if (*list == NULL) {
+        *list = temp;
+    } else {
+        temp->link = *list;
+        *list = temp;
+    }
+}
+
+void front_del(struct Student** list) {
+    if (*list == NULL) {
+        printf("List is empty.\n");
+    } else {
+        struct Student* temp = *list;
+        *list = (*list)->link;
+        printf("Deleted USN is %s.\n", temp->USN);
+        free(temp);
+    }
+}
+
+void rear_del(struct Student** list) {
+    if (*list == NULL) {
+        printf("List is empty.\n");
+    } else if ((*list)->link == NULL) {
+        printf("Deleted USN is %s.\n", (*list)->USN);
+        free(*list);
+        *list = NULL;
+    } else {
+        struct Student* temp = *list;
+        while (temp->link->link != NULL) {
+            temp = temp->link;
+        }
+        printf("Deleted USN is %s.\n", temp->link->USN);
+        free(temp->link);
+        temp->link = NULL;
+    }
+}
+
+void display(struct Student* list) {
+    struct Student* temp = list;
+    printf("Student List:\n");
+    while (temp != NULL) {
+        printf("USN: %s\n", temp->USN);
+        temp = temp->link;
+    }
+}
+
+
+
+void demonstrateQueue(struct Student** front, struct Student** rear, char USN[]) {
+    rear_ins(rear, USN);
+    if (*front == NULL) {
+        *front = *rear;
+    }
+    printf("Student %s enqueued into the queue.\n", USN);
+}
+
+int main() {
+    struct Student* studentList = NULL;
+    struct Student* stackTop = NULL;
+    struct Student* queueFront = NULL;
+    struct Student* queueRear = NULL;
+int ch;
+    int choice;
+    char usn[20];
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Create N students (Insert at end)\n");
+        printf("2. Insert at front\n");
+        printf("3. Delete at front\n");
+        printf("4. Delete at end\n");
+        printf("5. Display status of SLL\n");
+        printf("6. Demonstrate Stack\n");
+        printf("7. Demonstrate Queue\n");
+        printf("8. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the USN of the student: ");
+                scanf("%s", usn);
+                rear_ins(&studentList, usn);
+                break;
+            case 2:
+                printf("Enter the USN of the student: ");
+                scanf("%s", usn);
+                front_ins(&studentList, usn);
+                break;
+            case 3:
+                front_del(&studentList);
+                break;
+            case 4:
+                rear_del(&studentList);
+                break;
+            case 5:
+                display(studentList);
+                break;
+            case 6:
+            	printf("Enter the choice:");
+				scanf("%d",&ch);
+				while(1){
+					switch(ch)
+				    {
+						case 1:
+							printf("Enter the USN of the student: ");
+		                    scanf("%s",usn);
+							front_ins(&stackTop, usn);
+					        printf("Student %s pushed onto the stack.\n",usn);
+					        break;
+				        case 2:
+					        front_del(&studentList );
+					        break;
+				        case 3:
+				        	exit(0);
+				        default:
+				        	printf("inavalid input");
+							
+			        }
+				}
+		    
+            case 7:
+                printf("Enter the USN of the student: ");
+                scanf("%s", usn);
+                demonstrateQueue(&queueFront, &queueRear, usn);
+                break;
+            case 8:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 8);
+
+    return 0;
+}
