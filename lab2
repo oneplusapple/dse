@@ -1,0 +1,68 @@
+#include<stdio.h>
+#include<stdlib.h>
+void insert(int *a,int ele,int pos,int n){
+	int i;
+	if(pos<=0||pos>n){
+		printf("\n Invalid Position");
+		return;
+	}
+	for(i=n;i>=pos;i--){
+		(a+i+1)=(a+i);	
+	}
+	*(a+pos)=ele;	
+}
+void delete(int *a,int pos,int n){
+	int i;
+	if(pos<=0||pos>n){
+		printf("\n Invalid Position");
+		return;
+	}
+	for(i=pos;i<=n;i++){
+		(a+i)=(a+i+1);
+	}	
+}
+void display(int *a,int n){
+	int i;
+	printf("\n The roll numbers are:\n");
+	for(i=1;i<=n;i++){
+		printf("%d\t",*(a+i));
+	}
+	printf("\n");
+}
+int main(){
+	int *a,i,n,ch,pos,ele;
+	printf("\n Enter the number of students:");
+	scanf("%d",&n);
+	a=(int*)malloc(n*sizeof(int));
+	printf("\n Enter the roll number of sturdent:\n");
+	for(int i=1;i<=n;i++){
+		scanf("%d",(a+i));
+	}
+	while(1){
+		printf("Enter 1.Insert 2.delete 3:disply 4.Exit");
+		printf("\n Enter the choice:");
+		scanf("%d",&ch);
+		switch(ch){
+			case 1:
+				printf("Enter the Element to be inserted:");
+				scanf("%d",&ele);
+				printf("Enter the position to be inserted:");
+				scanf("%d",&pos);
+				insert(a,ele,pos,n);
+				n=n+1;
+				break;
+			case 2:
+				printf("Enter the position to be deleted:");
+				scanf("%d",&pos);
+				delete(a,pos,n);
+				n=n-1;
+				break;
+			case 3:
+				display(a,n);
+				break;
+			case 4:
+				exit(0);
+		}
+	}
+	return(0);
+}
