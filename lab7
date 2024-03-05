@@ -1,0 +1,146 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct studnode{
+    char ssn[10];
+    struct studnode* llink;
+    struct studnode* rlink;
+} studnode;
+
+struct studnode* createstudentNode(char ssn1[]) {
+    struct studnode* temp = (struct studnode*)malloc(sizeof(struct studnode));
+    strcpy(temp->ssn,ssn1);
+    temp->llink = NULL;
+    temp->rlink = NULL;
+    return temp;
+}
+
+struct studnode* r_ins(struct studnode* list, char ssn[]){
+    struct studnode* temp = createstudentNode(ssn);
+    if(list == NULL){
+        list = temp;
+        return list;
+    } else {
+        struct studnode* temp1 = list;
+        while(temp1->rlink != NULL){
+            temp1 = temp1->rlink; 
+        }
+        temp1->rlink = temp;
+        temp->llink = temp1;
+    }
+    return list;
+}
+
+struct studnode* f_ins(struct studnode* list, char ssn[]){
+    struct studnode* temp = createstudentNode(ssn);
+    if(list==NULL){
+        list=temp;
+        return list;
+    } else {
+        temp->rlink=list;
+        list->llink=temp;
+        list=temp;
+    }
+    return list;
+}
+
+void f_del(struct studnode** list){
+	struct studnode* temp = *list;
+    if(*list==NULL){
+        printf("\nList is Empty.");
+        return;
+    }
+    *list = (*list)->rlink;
+    temp->rlink=NULL;
+    (*list)->llink=NULL;
+    printf("\nDeleted Element is: %s", temp->ssn);
+    free(temp);
+    return;
+}
+
+void r_del(struct studnode** list){
+	struct studnode* temp = *list;
+    struct studnode* prev = NULL;
+    if(*list == NULL){
+        printf("\nList is Empty.");
+        return;
+    }
+    while(temp->rlink != NULL){
+        prev = temp;
+        temp = temp->rlink;
+    }
+    temp->llink=NULL;
+    prev->rlink = NULL;
+    printf("\nDeleted Element is: %s", temp->ssn);
+    free(temp);
+    return;
+}
+
+void display(struct studnode* list){
+    int count = 0;
+    struct studnode* temp = list;
+    if(list == NULL){
+        printf("\nList is Empty.");
+        return;
+    }
+    printf("Elements in the list are:\n");
+    while(temp != NULL){
+        printf("%s\n", temp->ssn);
+        count++; 
+        temp = temp->rlink;    
+    }
+    printf("Number of Nodes is: %d\n", count);
+    return;
+}
+
+int main() {
+    struct studnode* studentList = NULL;
+    int ch;
+	char ssn[10];
+    while(1) {
+        printf("\nMenu:\n");
+        printf("1. Insert at end\n");
+        printf("2. Insert at front\n");
+        printf("3. Delete at front\n");
+        printf("4. Delete at end\n");
+        printf("5. Display status of DLL\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                printf("\nEnter the SSN to be inserted: ");
+                scanf("%s",ssn);
+                studentList = r_ins(studentList,ssn);
+                break;
+            case 2:
+                printf("\nEnter the SSN to be inserted: ");
+                scanf("%s",ssn);
+                studentList = f_ins(studentList, ssn);
+                break;
+            case 3:
+                f_del(&studentList);
+                break;
+            case 4:
+                r_del(&studentList);
+                break;
+            case 5:
+                display(studentList);
+                break;
+            case 6:
+                printf("Exiting program.\n");
+                exit(0);
+                
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    }
+    while (studentList != NULL) {
+        struct studnode* temp = studentList;
+        studentList = studentList->rlink;
+        free(temp);
+    }
+    return 0;
+}
